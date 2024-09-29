@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CountdownTimer from '../components/CountdownTimer.astro';
+import Carousel from '../components/Carousel.tsx';
+import '../styles/styles.css';
+const defaultImages = [
+  'src/assets/img/IMG_0591.JPG',
+  'src/assets/img/IMG_4600.JPG',
+  'src/assets/img/IMG_5960.JPG'
+];
+---
+
+<Layout title="Welcome to Astro">
+	<div class="carousel-background relative overflow-hidden w-full h-full flex items-center justify-center">
+		<Carousel images={defaultImages} client:load />
+		<div class="countdown-container bg-black bg-opacity-50 absolute inset-0 flex flex-col items-center justify-center">
+			<CountdownTimer targetDate="2024-12-22T23:59:59" />
+			<div class="button-group flex flex-row items-center mt-4">
+				<button id="startBtn" class="bg-transparent border-2 border-black text-white py-2 px-4 rounded mr-2">Wishlist</button>
+				<button id="resetBtn" class="bg-transparent border-2 border-black text-white py-2 px-4 rounded">Draw Names</button>
+			</div>
+		</div>
+	</div>
+</Layout>

@@ -1,0 +1,109 @@
+---
+interface Props {
+  targetDate: string;
+}
+
+const { targetDate } = Astro.props;
+---
+<div class="flex flex-col items-center justify-center gap-10 font-sans">
+  <div class="flex flex-row justify-center gap-10">
+    <div class="flex flex-col items-center">
+      <span id="days" class="text-[10rem] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 text-shadow-lg text-center">00</span>
+      <span class="text-2xl uppercase text-yellow-700 mt-2">Days</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <span id="hours" class="text-[10rem] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 text-shadow-lg text-center">00</span>
+      <span class="text-2xl uppercase text-yellow-700 mt-2">Hours</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <span id="minutes" class="text-[10rem] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 text-shadow-lg text-center">00</span>
+      <span class="text-2xl uppercase text-yellow-700 mt-2">Minutes</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <span id="seconds" class="text-[10rem] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 text-shadow-lg text-center">00</span>
+      <span class="text-2xl uppercase text-yellow-700 mt-2">Seconds</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .text-shadow {
+    text-shadow: 
+      0 1px 0 #ccc,
+      0 2px 0 #c9c9c9,
+      0 3px 0 #bbb,
+      0 4px 0 #b9b9b9,
+      0 5px 0 #aaa,
+      0 6px 1px rgba(0,0,0,.1),
+      0 0 5px rgba(0,0,0,.1),
+      0 1px 3px rgba(0,0,0,.3),
+      0 3px 5px rgba(0,0,0,.2),
+      0 5px 10px rgba(0,0,0,.25),
+      0 10px 10px rgba(0,0,0,.2),
+      0 20px 20px rgba(0,0,0,.15);
+  }
+
+  /* Updated animation class for rolling in */
+  .roll-in {
+    animation: roll-in 0.7s ease-out forwards;
+  }
+
+  /* Updated keyframes for rolling digits with reduced travel distance */
+  @keyframes roll-in {
+    from {
+      transform: translateY(30%); /* Reduced from 100% */
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>
+
+<script define:vars={{ targetDate }}>
+  const targetTime = new Date(targetDate).getTime();
+
+  const updateTimer = () => {
+    const now = new Date().getTime();
+    const distance = targetTime - now;
+
+    if (distance < 0) {
+      clearInterval(timerInterval);
+      const countdownTimer = document.querySelector('.flex.justify-center');
+      if (countdownTimer) {
+        countdownTimer.innerHTML = "<div class='text-9xl font-bold text-yellow-600 text-shadow text-center'>EXPIRED</div>";
+      }
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const updateElement = (id, value) => {
+      const element = document.getElementById(id);
+      if (element) {
+        const currentValue = parseInt(element.innerText, 10);
+        if (currentValue !== value) {
+          element.classList.remove('roll-in'); // Remove existing animation class
+          void element.offsetWidth; // Trigger reflow to restart animation
+          element.classList.add('roll-in'); // Add roll-in class to animate
+          setTimeout(() => {
+            element.innerText = String(value).padStart(2, '0'); // Update the digit
+            element.classList.remove('roll-in'); // Clean up the animation class
+          }, 600); // Duration matches the animation duration
+        }
+      }
+    };
+
+    updateElement('days', days);
+    updateElement('hours', hours);
+    updateElement('minutes', minutes);
+    updateElement('seconds', seconds);
+  };
+
+  const timerInterval = setInterval(updateTimer, 1000);
+  updateTimer();
+</script>
