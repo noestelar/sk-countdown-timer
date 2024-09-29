@@ -11,13 +11,15 @@ const defaultImages = [
 ---
 
 <Layout title="Welcome to Astro">
-	<div class="carousel-background relative overflow-hidden w-full h-full flex items-center justify-center">
+	<div class="carousel-background relative overflow-hidden w-full h-full flex items-center justify-center bg-black bg-opacity-50">
 		<Carousel images={defaultImages} client:load />
-		<div class="countdown-container bg-black bg-opacity-50 absolute inset-0 flex flex-col items-center justify-center">
-			<CountdownTimer targetDate="2024-12-22T23:59:59" />
-			<div class="button-group flex flex-row items-center mt-4">
-				<button id="startBtn" class="bg-transparent border-2 border-black text-white py-2 px-4 rounded mr-2">Wishlist</button>
-				<button id="resetBtn" class="bg-transparent border-2 border-black text-white py-2 px-4 rounded">Draw Names</button>
+		<div class="countdown-container absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none bg-black bg-opacity-50">
+			<div class=" bg-opacity-50 p-8 rounded-lg pointer-events-auto">
+				<CountdownTimer targetDate="2024-12-22T23:59:59" />
+				<div class="button-group flex flex-row items-center mt-4">
+					<button id="startBtn" class=" bg-opacity-50 border-2 border-white text-white py-2 px-4 rounded mr-2 hover:bg-white hover:text-black transition-colors">Wishlist</button>
+					<button id="resetBtn" class="bg-opacity-50 border-2 border-white text-white py-2 px-4 rounded hover:bg-white hover:text-black transition-colors">Draw Names</button>
+				</div>
 			</div>
 		</div>
 	</div>
